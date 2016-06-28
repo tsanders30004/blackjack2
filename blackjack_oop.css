@@ -1,5 +1,6 @@
 body {
-  font-family: "Helvetica Neue", sans-serif;
+  font-family: Verdana, sans-serif;
+  color: white;
 }
 
 * {
@@ -8,8 +9,8 @@ body {
 
 #table {
   padding: 80px 50px;
-  border: 4px solid #6b4200;
-  border-radius: 40px;
+  border: 4px solid black;
+  border-radius: 20px;
   background: linear-gradient(#9fe558 0%, #8edb3d 40%, #67c200 100%) no-repeat no-repeat;
 }
 
@@ -68,4 +69,8 @@ body {
   color: white;
   background: linear-gradient(#666, #222);
   border: 1px solid black;
+}
+
+#dealer-hand,  #player-hand {
+     border-radius: 10px;
 }
