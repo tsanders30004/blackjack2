@@ -1,4 +1,5 @@
-"use strict";
+/* Black Jack Game */
+/* This is the first application written in OOP. */
 
 var myDeck = new Deck;
 var playerHand = new Hand('#player-hand');
@@ -10,8 +11,8 @@ function Card(faceValue, suit) {
      this.suit           = suit;
 }
 
+/* returns a deck of cards */
 function Deck() {
-
      function createSuit (mySuit) {
           var setOfCardsForOneSuit = [];
           for (var i = 2; i <= 10; i++) {
@@ -28,11 +29,12 @@ function Deck() {
      this.cards = createSuit('spades').concat(createSuit('clubs')).concat(createSuit('hearts')).concat(createSuit('diamonds'));
 }
 
+/* the Hand object represents a player's hand */
 function Hand(tagID) {
      this.cards = [];
      this.tagID = tagID;
      this.dealCard = function(){
-          var randomIndex = Math.floor((Math.random() * myDeck.cards.length) + 1) - 1; /* random number between 0 and 51 */
+          var randomIndex = Math.floor((Math.random() * myDeck.cards.length) + 1) - 1; /* random number between 0 and number of cards remaining in the deck */
           var randomCard = myDeck.cards[randomIndex];
           this.cards.push(randomCard);
           myDeck.cards.splice(randomIndex, 1);
@@ -43,12 +45,7 @@ function Hand(tagID) {
           + randomCard.faceValue + '_of_' + randomCard.suit
           +'.png" height="80" width="60">'
           + '</div>';
-
-          // var imageFilename = 'images/' + randomCard.point + '_of_' + randomCard.suit +'.png';
-          // console.log(imageFilename);
-
           $(tagID).append(cardHTML);
-
      };
      this.calculatePoints = function(){
           var sum = 0;
@@ -89,6 +86,7 @@ function Hand(tagID) {
      };
 }
 
+/* display the score */
 function displayPoints() {
      var dealerPoints = dealerHand.calculatePoints();
      $('#dealer-points').text(dealerPoints);
@@ -96,6 +94,7 @@ function displayPoints() {
      $('#player-points').text(playerPoints);
 };
 
+/* determine if either the player or dealer has won */
 function checkForBusts() {
      var playerPoints = playerHand.calculatePoints();
      if (playerPoints > 21) {
@@ -142,9 +141,8 @@ $(document).ready(function(){
      });
 
      $('#hit-button').click(function () {
-          checkForBusts();    /* this is needed here in order to disable the hit button after the game is over. */
+          // checkForBusts();    /* this is needed here in order to disable the hit button after the game is over. */
           if (!gameOver) {
-               console.log('gameOver = ' + gameOver);
                playerHand.dealCard();
                displayPoints();
                checkForBusts();
@@ -153,7 +151,7 @@ $(document).ready(function(){
 
      /* ----------------------------------------------------------- */
      $('#stand-button').click(function () {
-          checkForBusts();    /* this is needed here in order to disable the stand button after the game is over. */
+          // checkForBusts();    /* this is needed here in order to disable the stand button after the game is over. */
           if (!gameOver) {
                var dealerPoints = dealerHand.calculatePoints();
                while (dealerPoints < 17) {
@@ -167,14 +165,15 @@ $(document).ready(function(){
                     var dealerPoints = dealerHand.calculatePoints();
                     if (playerPoints > dealerPoints) {
                          $('#messages').text('You Win!');
+                         gameOver = true;
                     } else if (playerPoints === dealerPoints) {
+                         gameOver = true;
                          $('#messages').text('Tie');
                     } else {
                          $('#messages').text('Dealer Wins...');
+                         gameOver = true;
                     }
                }
           }
 
      });
-
-}); /* should be last in the file. */
