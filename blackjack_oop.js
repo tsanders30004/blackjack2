@@ -5,6 +5,7 @@ var myDeck = new Deck;
 var playerHand = new Hand('#player-hand');
 var dealerHand = new Hand('#dealer-hand');
 var gameOver = false;
+var cardsDealt = false;
 
 function Card(faceValue, suit) {
      this.faceValue      = faceValue;
@@ -113,6 +114,7 @@ function checkForBusts() {
 
 function resetGame() {
      gameOver = false;
+     cardsDealt = false;
      myDeck = new Deck;
      playerHand = new Hand('#player-hand');
      dealerHand = new Hand('#dealer-hand');
@@ -152,13 +154,14 @@ $(document).ready(function(){
           }, 2000);
 
           // displayPoints();
-
           checkForBusts();
+
+          cardsDealt = true;
      });
 
      $('#hit-button').click(function () {
           // checkForBusts();    /* this is needed here in order to disable the hit button after the game is over. */
-          if (!gameOver) {
+          if (!gameOver && cardsDealt) {
                playerHand.dealCard();
                displayPoints();
                checkForBusts();
@@ -168,7 +171,7 @@ $(document).ready(function(){
      /* ----------------------------------------------------------- */
      $('#stand-button').click(function () {
           // checkForBusts();    /* this is needed here in order to disable the stand button after the game is over. */
-          if (!gameOver) {
+          if (!gameOver && cardsDealt) {
                var dealerPoints = dealerHand.calculatePoints();
                while (dealerPoints < 17) {
                     dealerHand.dealCard();
@@ -182,12 +185,15 @@ $(document).ready(function(){
                     if (playerPoints > dealerPoints) {
                          $('#messages').text('You Win!');
                          gameOver = true;
+                         cardsDealt = false;
                     } else if (playerPoints === dealerPoints) {
                          gameOver = true;
+                         cardsDealt = false;
                          $('#messages').text('Tie');
                     } else {
                          $('#messages').text('Dealer Wins...');
                          gameOver = true;
+                         cardsDealt = false;
                     }
                }
           }
