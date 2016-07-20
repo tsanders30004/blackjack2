@@ -3,6 +3,7 @@
 var myDeck = new Deck;
 var playerHand = new Hand('#player-hand');
 var dealerHand = new Hand('#dealer-hand');
+var gameOver = false;
 
 function Card(faceValue, suit) {
      this.faceValue      = faceValue;
@@ -99,17 +100,20 @@ function checkForBusts() {
      var playerPoints = playerHand.calculatePoints();
      if (playerPoints > 21) {
           $('#messages').text('Dealer Wins...');
+          gameOver = true;
           return true;
      }
      var dealerPoints = dealerHand.calculatePoints();
      if (dealerPoints > 21) {
           $('#messages').text('You Win!');
+          gameOver = true;
           return true;
      }
      return false;
 };
 
 function resetGame() {
+     gameOver = false;
      myDeck = new Deck;
      playerHand = new Hand('#player-hand');
      dealerHand = new Hand('#dealer-hand');
@@ -138,29 +142,36 @@ $(document).ready(function(){
      });
 
      $('#hit-button').click(function () {
-          playerHand.dealCard();
-          displayPoints();
-          checkForBusts();
+          checkForBusts();    /* this is needed here in order to disable the hit button after the game is over. */
+          if (!gameOver) {
+               console.log('gameOver = ' + gameOver);
+               playerHand.dealCard();
+               displayPoints();
+               checkForBusts();
+          }
      });
 
      /* ----------------------------------------------------------- */
      $('#stand-button').click(function () {
-          var dealerPoints = dealerHand.calculatePoints();
-          while (dealerPoints < 17) {
-               dealerHand.dealCard();
-               dealerPoints = dealerHand.calculatePoints();
-          }
-          displayPoints();
-          if (!checkForBusts()) {
-               // determine the winner
-               var playerPoints = playerHand.calculatePoints();
+          checkForBusts();    /* this is needed here in order to disable the stand button after the game is over. */
+          if (!gameOver) {
                var dealerPoints = dealerHand.calculatePoints();
-               if (playerPoints > dealerPoints) {
-                    $('#messages').text('You Win!');
-               } else if (playerPoints === dealerPoints) {
-                    $('#messages').text('Tie');
-               } else {
-                    $('#messages').text('Dealer Wins...');
+               while (dealerPoints < 17) {
+                    dealerHand.dealCard();
+                    dealerPoints = dealerHand.calculatePoints();
+               }
+               displayPoints();
+               if (!checkForBusts()) {
+                    // determine the winner
+                    var playerPoints = playerHand.calculatePoints();
+                    var dealerPoints = dealerHand.calculatePoints();
+                    if (playerPoints > dealerPoints) {
+                         $('#messages').text('You Win!');
+                    } else if (playerPoints === dealerPoints) {
+                         $('#messages').text('Tie');
+                    } else {
+                         $('#messages').text('Dealer Wins...');
+                    }
                }
           }
 
