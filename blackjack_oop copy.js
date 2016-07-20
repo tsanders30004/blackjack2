@@ -40,11 +40,20 @@ function Hand(tagID) {
           myDeck.cards.splice(randomIndex, 1);
 
           /* while we're at it, show the cards on the table... */
+          var cardHTML = '<div class="card animated fadeInDown">'
+          // + '<img class="newCard" src="images/'
 
-          var rotateStyle = 'style="transform: rotate(' +     (Math.random()*26-13)  + 'deg)"';
+          + '<img class="newCard"'
 
-          var cardHTML = '<div class="card animated fadeInDown">' + '<img class="newCard"' + rotateStyle
-          + 'src="images/' + randomCard.faceValue + '_of_' + randomCard.suit +'.png">' + '</div>';
+          + 'style="transform: rotate(20deg)"'
+
+          + 'src="images/'
+
+
+
+          + randomCard.faceValue + '_of_' + randomCard.suit
+          +'.png">'
+          + '</div>';
           $(tagID).append(cardHTML);
      };
      this.calculatePoints = function(){
@@ -116,7 +125,6 @@ function resetGame() {
      myDeck = new Deck;
      playerHand = new Hand('#player-hand');
      dealerHand = new Hand('#dealer-hand');
-     $('#win_logo').hide();
      $('#player-points').text('');
      $('#dealer-points').text('');
      $('#messages').text('');
@@ -147,11 +155,8 @@ $(document).ready(function(){
                dealerHand.dealCard();
           }, 1500);
 
-          setTimeout(function() {
-               displayPoints();
-          }, 2000);
 
-          // displayPoints();
+          displayPoints();
 
           checkForBusts();
      });
